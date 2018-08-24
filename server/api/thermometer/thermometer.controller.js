@@ -2,21 +2,35 @@ var db=require('./../../sqldb')();
 var thermometer = require('./thermometer.model.js')();
 
 var thermometerHandler = {
-	getAllthermometers: (req, res)=>{
-		thermometer.getAllthermometers(db, req)
+	getAllTemperature: (req, res)=>{
+		thermometer.getAllTemperature(db, req)
 		.then((data) =>{
+			let final = [];
+			data.rows.map((item, index)=>{
+				item.dataValues.temperature.map((item2,index2)=>{
+					if(new Date(item2.timestamp) > new Date(req.body.date)){
+						final.push({
+							"temperature": item2.temperature,
+							"timestamp": item2.timestamp,
+							"index": index2
+						})
+					}
+				})
+			})
 			res.json({
-				data,
+				final,
 				error: false
 			})
 		})
 		.catch((err) =>{
 			res.json({
 				message:'Internal Server Error',
+				err,
 				error: true
 			})
 		})
 	},
+
 	addTemperature: (req, res) => {
 		if(req.body){
 			thermometer.addTemperature(db, req)
@@ -34,8 +48,9 @@ var thermometerHandler = {
 			})
 		}
 		else {
-			res.sendStatus(400).send({
-				message:'Bad Request'
+			res.json({
+				message:'Bad Request',
+				error: true
 			})
 		}
 	}

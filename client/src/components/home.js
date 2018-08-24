@@ -8,42 +8,59 @@ import {Button, Glyphicon, Label} from 'react-bootstrap';
 
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form';
-import { getUserProfile, generateTemperature } from '../actions';
+import { getAllTemperature, generateTemperature } from '../actions';
+import moment from 'moment';
 
+import DateTimePicker from 'react-datetime-picker';
 
 class App extends Component {
   constructor(){
     super();
     this.state = {
       editting: false,
-      temp: 0
+      temp: 0,
+      date: new Date()
     }
     this.myTimer = this.myTimer.bind(this)
   }
 
   componentDidMount(){
-    // var myVar = setInterval(this.myTimer, 5000);
+    var myVar = setInterval(this.myTimer, 5000);
   }
 
   myTimer(){
     var d = new Date();
-    console.log("hello")
     const min = 1;
     const max = 100;
     const rand = min + Math.random() * (max - min);
     this.props.generateTemperature({
       temperature:rand,
-      themometerId: 1
+      thermometerId: "1"
     })
     this.setState({
       temp: rand
     });
   }
 
+  getDate = (date) => {
+    this.setState({
+      date
+    });
+  }
+
+  getGraph = () => {
+    let data = {
+      date: this.state.date,
+      thermometerId: "1"
+    };
+    this.props.getAllTemperature(data);
+  }
+
   render() {
+
     var chartSeries = [
       {
-        field: 'age',
+        field: 'temperature',
         name: 'Temperature',
         color: '#ff7f0e',
         style: {
@@ -60,15 +77,20 @@ class App extends Component {
 
     return (
       <div>
-          <Button>
-            <Glyphicon glyph="align-left" />
-            Current Temperature
+          
+          <h1><Label>{"Current Temperature: " + this.state.temp + " Degrees"}</Label></h1>
+          <DateTimePicker
+            onChange={this.getDate}
+            value={this.state.date}
+          />
+          <br/>
+          <Button onClick={this.getGraph}>
+            Get Filtered Temperature Chart
           </Button>
-          <h1><Label>{this.state.temp + " Degrees"}</Label></h1>
           <LineChart
             width= {600}
             height= {300}
-            data= {chartData}
+            data= {this.props.data.graph}
             chartSeries= {chartSeries}
             x= {x}
           />
@@ -79,22 +101,14 @@ class App extends Component {
 
 
 function mapStateToProps({auth, user}) {
-  return user.profile?{
-      status: auth.status,
-      profile: user.profile,
-      initialValues: {
-        email: user.profile.email,
-        firstName: user.profile.name.first,
-        lastName: user.profile.name.last
-      },
-      updateProfileFailMsg: user.updateProfileFailMsg
+  return user.data?{
+     data: user.data
   }:{
-    status: auth.status,
-    profile: user.profile
+    data: user
   }
 }
 
 
-export default connect(mapStateToProps, {getUserProfile, generateTemperature})(reduxForm({
+export default connect(mapStateToProps, {getAllTemperature, generateTemperature})(reduxForm({
   form: 'profileUpdate',
 })(App));

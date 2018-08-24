@@ -6,7 +6,10 @@ import {
     TRY_CONNECT,
     GET_USER_PROFILE,
     UPDATE_USER_PROFILE_GOOD,
-    UPDATE_USER_PROFILE_FAIL 
+    UPDATE_USER_PROFILE_FAIL ,
+
+    GENERATE_TEMP,
+    FETCH_GRAPH
 } from './types';
 const ROOT_URL = process.env.API_URI || 'http://localhost:3001';
 
@@ -17,7 +20,11 @@ export function generateTemperature(data){
         axios
             .post(`/api/thermometer/generateTemperature`, data)
             .then(res => {
-                
+                dispatch({
+                    type: GENERATE_TEMP,
+                    payload: res
+                })
+
             })
             .catch(error => {
                 console.log(error);
@@ -31,7 +38,10 @@ export function getAllTemperature(data){
         axios
             .post(`/api/thermometer/getAllTemperature`, data)
             .then(res => {
-                
+                dispatch({
+                    type: FETCH_GRAPH,
+                    payload: res
+                })
             })
             .catch(error => {
                 console.log(error);
