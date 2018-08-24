@@ -14,7 +14,7 @@ let all = {
   // Root path of server
   root: path.normalize(__dirname + '/../../..'),
   // Server port
-  port: process.env.PORT || 8080,
+  port: process.env.PORT || 8000,
 };
 // Export the config object based on the NODE_ENV
 // ==============================================

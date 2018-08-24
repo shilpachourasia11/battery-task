@@ -41,6 +41,7 @@ thermometer.getAllthermometers = function (db, req) {
 }
 
 thermometer.addTemperature = function(db, req) {
+  console.log(req.body)
   return db.thermometer.update({
     temperature: {
       temp: req.body,

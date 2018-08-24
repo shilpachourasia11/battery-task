@@ -12,6 +12,5 @@ module.exports = () => {
 		created_at: new Date(),
 		updated_at: new Date()
 	})
-	console.log(thermometer)
 	return thermometer;
 }
