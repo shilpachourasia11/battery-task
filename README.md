@@ -10,3 +10,7 @@ To run:
 
 Server port: 8000
 Client port: 3000
+
+In the app:
+The app opens and starts generating temperatures that go and get saved in the postgresql db.
+You can select the date and time and filter the temperature graph as per the selected date and time by clicking on the button that says "Get Filtered Temperature Chart".
