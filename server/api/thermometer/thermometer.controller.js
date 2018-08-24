@@ -5,24 +5,31 @@ var thermometerHandler = {
 	getAllthermometers: (req, res)=>{
 		thermometer.getAllthermometers(db, req)
 		.then((data) =>{
-        res.status(200).send(data)
+			res.json({
+				data,
+				error: false
+			})
 		})
 		.catch((err) =>{
-			res.sendStatus(500).send({
-          message:'Internal Server Error'
-      })
+			res.json({
+				message:'Internal Server Error',
+				error: true
+			})
 		})
 	},
 	addTemperature: (req, res) => {
-		console.log("hello")
 		if(req.body){
 			thermometer.addTemperature(db, req)
 			.then((data) =>{
-				res.sendStatus(200).send(req.body)
+				res.json({
+					data,
+					error: false
+				})
 			})
 			.catch((err) =>{
-				res.sendStatus(500).send({
-					message:'Internal Server Error'
+				res.json({
+					message:'Internal Server Error',
+					error: true
 				})
 			})
 		}

@@ -15,9 +15,14 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      editting: false
+      editting: false,
+      temp: 0
     }
     this.myTimer = this.myTimer.bind(this)
+  }
+
+  componentDidMount(){
+    // var myVar = setInterval(this.myTimer, 5000);
   }
 
   myTimer(){
@@ -27,15 +32,15 @@ class App extends Component {
     const max = 100;
     const rand = min + Math.random() * (max - min);
     this.props.generateTemperature({
-      temp:rand,
+      temperature:rand,
       themometerId: 1
     })
+    this.setState({
+      temp: rand
+    });
   }
 
   render() {
-    var myVar = setInterval(this.myTimer, 5000);
-
-    // your date format, use for parsing
     var chartSeries = [
       {
         field: 'age',
@@ -59,7 +64,7 @@ class App extends Component {
             <Glyphicon glyph="align-left" />
             Current Temperature
           </Button>
-          <h1><Label>97degree</Label></h1>
+          <h1><Label>{this.state.temp + " Degrees"}</Label></h1>
           <LineChart
             width= {600}
             height= {300}

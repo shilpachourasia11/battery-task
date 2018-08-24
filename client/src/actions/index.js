@@ -14,9 +14,22 @@ axios.defaults.baseURL = ROOT_URL;
 
 export function generateTemperature(data){
     return function (dispatch) {
-        // Submit email/password to server
         axios
             .post(`/api/thermometer/generateTemperature`, data)
+            .then(res => {
+                
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({type: AUTH_ERROR, payload: 'Server Error, try later.'})
+            });
+    }
+}
+
+export function getAllTemperature(data){
+    return function (dispatch) {
+        axios
+            .post(`/api/thermometer/getAllTemperature`, data)
             .then(res => {
                 
             })
